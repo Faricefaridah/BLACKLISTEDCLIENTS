@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blacklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #4CAF50;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #ff4c4c;
+        }
+        .logout-btn:hover {
+            background-color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blacklist of Clients</h1>
+    {% if session.get('logged_in') %}
+    <form action="/add" method="post">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="id_number" placeholder="ID Number" required>
+        <input type="text" name="shop" placeholder="Shop" required>
+        <input type="text" name="phone_number" placeholder="Phone Number" required>
+        <button type="submit">Add Client</button>
+    </form>
+    <a href="/logout">
+        <button class="logout-btn">Logout</button>
+    </a>
+    {% endif %}
+    
+    <h2>Search Clients</h2>
+    <form action="/search" method="post">
+        <input type="text" name="search_term" placeholder="Enter name or ID number" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if clients %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>ID Number</th>
+            <th>Shop</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client[0] }}</td>
+            <td>{{ client[1] }}</td>
+            <td>{{ client[2] }}</td>
+            <td>{{ client[3] }}</td>
+            <td>{{ client[4] }}</td>
+            {% if session.get('logged_in') %}
+            <td>
+                <a href="/delete/{{ client[0] }}">Delete</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
